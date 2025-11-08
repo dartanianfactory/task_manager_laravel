@@ -15,6 +15,7 @@ class TaskResource extends JsonResource
             'project_id' => $this->project_id,
             'header' => $this->header,
             'description' => $this->description,
+            'attachment' => $this->getMedia('attachments'),
             'status' => $this->status,
             'finish_at' => $this->finish_at,
         ];

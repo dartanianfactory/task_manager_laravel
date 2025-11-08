@@ -39,6 +39,7 @@ POST http://localhost:3032/api/projects/{project_id}/tasks
     "header": "any header",
     "description: "any description",
     "status": "planned",
+    "attachment": file
 }
 
 GET http://localhost:3032/api/tasks/{id}

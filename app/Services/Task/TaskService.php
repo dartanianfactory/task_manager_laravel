@@ -8,13 +8,18 @@ use App\Models\Project\Task;
 use Carbon\Traits\Timestamp;
 use Illuminate\Support\Facades\Auth;
 
-class TaskService {
+class TaskService
+{
     public function store($data)
     {
         $user = Auth::user();
         $data['user_id'] = $user->id;
-
+        
         $task = Task::create($data);
+
+        if (request()->hasFile('attachment') && request()->file('attachment')->isValid()) {
+            $task->addMediaFromRequest('attachment')->toMediaCollection('attachments');
+        }
 
         return $task;
     }
@@ -23,7 +28,7 @@ class TaskService {
     {
         $id = $data['id'];
         $user_id = $data['user_id'];
-        
+
         $query = Task::query()->where('id', $id)->where('user_id', $user_id);
 
         $exists = $query->exists();

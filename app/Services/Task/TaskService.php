@@ -5,6 +5,8 @@ namespace App\Services\Task;
 use App\Exceptions\Task\TaskNotFoundException;
 use App\Models\Common\GlobalSettings;
 use App\Models\Project\Task;
+use App\Notifications\Task\StoreNotification;
+use App\Notifications\Task\UpdateNotification;
 use Carbon\Traits\Timestamp;
 use Illuminate\Support\Facades\Auth;
 
@@ -21,13 +23,16 @@ class TaskService
             $task->addMediaFromRequest('attachment')->toMediaCollection('attachments');
         }
 
+        $user->notify(new StoreNotification($task));
+
         return $task;
     }
 
     public function update($data): ?Task
     {
         $id = $data['id'];
-        $user_id = $data['user_id'];
+        $user = Auth::user();
+        $user_id = $user->id;
 
         $query = Task::query()->where('id', $id)->where('user_id', $user_id);
 
@@ -35,6 +40,8 @@ class TaskService
         if ($exists) {
             $task = $query->first();
             $task->update($data);
+
+            $user->notify(new UpdateNotification($task));
 
             return $task;
         }

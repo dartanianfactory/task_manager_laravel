@@ -18,6 +18,9 @@ docker exec -it tasker_php bash
 ---->php artisan migrate:fresh
 ---->php artisan db:seed 
 ---->exit
+
+вписать SMTP в файл .env для отправки уведомлений на почту
+
 ```
 
 ```
